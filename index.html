@@ -1,157 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>UoW-Degree Nav 2.0</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Style the side navigation */
-.sidenav {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #BAB9BC;
-  overflow-x: hidden;
-  align: center;
-}
-
-
-/* Side navigation links */
-.sidenav a {
-  color: white;
-  padding: 16px;
-  text-decoration: none;
-  display: block;
-}
-
-/* Change color on hover */
-.sidenav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-/* Style the content */
-.content {
-  margin-left: 200px;
-  padding-left: 20px;
-}
-</style>
-</head>
-<body>
-
-<div class="sidenav">
-<h2>Faculties</h2>
-  <a href="/seng-project/arts/">Arts</a>
-  <a href="/seng-project/business/">Business</a>
-  <a href="/seng-project/ed/">Education</a>
-  <a href="/seng-project/engg/">Engineering</a>
-  <a href="/seng-project/kines/">Kinesiology</a>
-  <a href="/seng-project/law/">Law</a>
-  <a href="/seng-project/nursing/">Nursing</a>
-  <a href="/seng-project/science/">Science</a>
-</div>
-
-<div class="content">
-  <h2>University of Winnipeg</h2>
-  <p>Blah Blah</p>
-</div>
-
-</body>
-  
-  <!--These are JavaScript Libraries-->
-<script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/jquery-latest.min.js"></script>
-<script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/utility.js"></script>
-<script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/cookies.js"></script>
-<script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/tabletop.js"></script>
-<script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/js-yaml.min.js"></script>
-<script type="text/javascript" src="https://contrafabulists-toolbox.github.io/master/javascript/github.js"></script>
-
-<h1>Update</h1>
-<script type="text/javascript">
-    // Reset the cookie manually
-    // Cookies.expire('token');
-    // URL: https://scubid.github.io/seng-project/pull-sheet/?key=your_key&worksheet=worksheet_name&token=your_personal_access_token&org=your_org&repo=your_repo&branch=your_branch
-    // Incoming Variables append
-    var $key = getUrlVar('key');
-    var $resource = getUrlVar('worksheet');
-    var $oAuthToken = getUrlVar('token');
-    var $org = getUrlVar('org');
-    var $repo = getUrlVar('repo');
-    var $branch = getUrlVar('branch');
-    var $yaml_store = "";
-    if($oAuthToken !='')
-      {
-      // Setting a cookie value
-      Cookies.set('token', $oAuthToken);
-      // Set with expiration
-      // Cookies.set('token', $oAuthToken, { expires: '01/01/2017' });
-      }
-    // Grab the token from cookie
-    $oAuthToken = Cookies.get('token');
-    $(document).ready( function() {
-      Tabletop.init( { key: $key,
-                       callback: showInfo,
-                       wanted: [ $resource ],
-                       debug: true } )
-    })
-    console.log($resource);
-    function showInfo(data, tabletop) {
-      $products = new Array();
-      $("#table_info").text("We found the tables " + tabletop.model_names.join(", "));
-      $.each( tabletop.sheets(), function(i, sheet) {
-        $("#table_info").append("<p>" + sheet.name + " has " + sheet.column_names.join(", ") + "</p>");
-      });
-      $product = tabletop.sheets($resource).all();
-      $count = 0;
-      $total_count = $product.length;
-      $.each( tabletop.sheets($resource).all(), function(i, service) {
-          $p = {};
-          $.each(service, function($key, $value) {
-            //console.log($key + ' == ' + $value);
-            $p[$key] = $value;
-          });
-          $products.push($p);
-          $count++;
-          //console.log($count + ' == ' + $total_count);
-          if($count==$total_count)
-            {
-            $yaml_dump = jsyaml.dump($products);
-            document.getElementById('source').value = $yaml_dump;
-            // Grab the token from cookie
-            $oAuthToken = Cookies.get('token');
-            var github = new Github({token: $oAuthToken,auth: "oauth"});
-            var repo = github.getRepo($org,$repo);
-            $writepath = '_data/' + $resource + '.yaml';
-            repo.write($branch,$writepath, $yaml_dump, 'Save', function(err) { });
-            console.log("writing 1:" + $writepath);
-            repo.getTree($branch + '?recursive=true', function(err, tree) {
-              $.each(tree, function(treeKey, treeValue) {
-                $path = treeValue['path'];
-                $sha = treeValue['sha'];
-                //console.log($path + ' == ' + $writepath);
-                if($path==$writepath)
-                  {
-                  repo.writemanual($branch,$writepath, $yaml_dump, 'Save', $sha, function(err) { });
-                  console.log("writing 2:" + $writepath);
-                  //alert("saved " + $writepath);
-                  }
-                });
-              });
-            }
-      });
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Group 17 - SENG 300</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+    .sidenav {
+       height: 100%;
+       width: 200px;
+       position: fixed;
+       z-index: 1;
+       top: 0;
+       left: 0;
+       background-color: #BAB9BC;
+       overflow-x: hidden;
+       align: center;
     }
-</script>
-<textarea cols="10" rows="5" id="source" style="border: 1px solid #000; width: 100%; height: 350px;"></textarea>
+    /* Side navigation links */
+    .sidenav a {
+       color: white;
+       padding: 16px;
+      text-decoration: none;
+      display: block;
+    }
+    /* Change color on hover */
+    .sidenav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    </style>
+    <script src="//script.sheetsu.com/"></script>
+  </head>
+<body>
+  
+  <section class="hero is-dark">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Group 17 - SENG Project
+      </h1>
+      <h2 class="subtitle">
+        University of Winnipeg - Program and Course Management Site
+      </h2>
+    </div>
+  </div>
+  </section>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io">
+      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+    </a>
+
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item">Add Course</a>
+      <a class="navbar-item">Add Program</a>
+     
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">Select Faculty/Program</a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="/seng-project/business/>Business</a>
+          <a class="navbar-item" href="/seng-project/ed/>Education</a>
+          <a class="navbar-item" href="/seng-project/ed/>Engineering</a>
+          <a class="navbar-item" href="/seng-project/ed/>Kinesiology</a>
+          <a class="navbar-item" href="/seng-project/ed/>Law</a>
+          <a class="navbar-item" href="/seng-project/ed/>Nursing</a>
+          <a class="navbar-item" href="/seng-project/ed/>Science</a>
+        
+          <hr class="navbar-divider">
+          <a class="navbar-item">Student View</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary">
+            <strong>Sign up</strong>
+          </a>
+          <a class="button is-light">
+            Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+      <h1 class="title">
+        University of Winnipeg
+      </h1>
+      <p class="subtitle">
+        BLAH BLAH <strong>BLAH BLAH</strong>!
+      </p>
+    </div>
+  </section>
+
+<script src="//load.sheetsu.com"></script>
+</body>
+
+
 </html>
